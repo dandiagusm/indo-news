@@ -1,1 +1,1 @@
-# news-aggregator
+# indo-news
