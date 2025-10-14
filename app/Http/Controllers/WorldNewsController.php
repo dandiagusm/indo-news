@@ -14,13 +14,13 @@ class WorldNewsController extends Controller
 
             'source-country' => 'id',
             'language' => 'id',
-            'number' => 20, // fetch top 20
+            'number' => 21, // fetch top 21
             'api-key' => env('WORLDNEWS_API_KEY'),
         ]);
 
         if ($response->failed()) {
             // if API fails, just show stored data
-            $articles = News::latest()->take(20)->get();
+            $articles = News::latest()->take(21)->get();
             return view('news.index', compact('articles'))
                 ->with('error', 'Gagal mengambil berita dari API. Menampilkan data lokal.');
         }
@@ -42,7 +42,7 @@ class WorldNewsController extends Controller
         }
 
         // 🧠 Load latest 20 from DB
-        $articles = News::latest()->take(20)->get();
+        $articles = News::latest()->take(21)->get();
 
         return view('news.index', compact('articles'));
     }
