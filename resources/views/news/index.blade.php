@@ -3,58 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📰 Indo News - Trending Hari Ini</title>
+    <title>📰 Indo News</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
     <!-- Header -->
-    <header class="bg-white shadow sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-blue-600">📰 Indo News</h1>
-            <p class="text-gray-600 text-sm">Berita Trending di Indonesia</p>
+<header class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-blue-600">📰 Indo News</h1>
+        <p class="text-gray-600 text-sm">Berita Trending di Indonesia</p>
+    </div>
+</header>
+
+<!-- 🧭 Kategori di bawah header -->
+<section class="py-4 border-b">
+    <div class="max-w-7xl mx-auto px-4 flex flex-wrap gap-2 text-sm">
+        @foreach($categories as $cat)
+            <a href="{{ url('/?category=' . $cat) }}"
+               class="px-4 py-2 rounded-full border transition-all duration-150
+                      {{ $category === $cat ? 'bg-blue-600 text-white border-blue-600 shadow-sm' : 'border-gray-300 hover:bg-blue-50' }}">
+               {{ ucfirst($cat) }}
+            </a>
+        @endforeach
+    </div>
+</section>
+
+<main class="max-w-7xl mx-auto px-4 py-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    @foreach($articles as $article)
+        <div class="group bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition flex flex-col">
+            @if($article->image)
+                <img src="{{ $article->image }}" alt="{{ $article->title }}" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105">
+            @endif
+
+            <div class="p-4 flex flex-col flex-grow">
+                <h2 class="font-semibold text-lg mb-2">
+                    <a href="{{ $article->url }}" target="_blank" class="hover:text-blue-600">
+                        {{ $article->title }}
+                    </a>
+                </h2>
+
+                <!-- 📰 Ringkasan yang expand saat hover -->
+                <p class="text-sm text-gray-600 mb-4 overflow-hidden transition-all duration-300 ease-in-out max-h-16 group-hover:max-h-60">
+                    {{ $article->summary }}
+                </p>
+
+                <!-- ⏰ Waktu di pojok kanan bawah -->
+                <div class="mt-auto text-xs text-gray-400 text-right flex items-center justify-end gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {{ \Carbon\Carbon::parse($article->published_at)->diffForHumans() }}
+                </div>
+            </div>
         </div>
-    </header>
+    @endforeach
+</main>
 
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto p-4">
-        @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
-                {{ session('error') }}
-            </div>
-        @endif
 
-        @if($articles->isEmpty())
-            <p class="text-center text-gray-600 mt-10">Belum ada berita untuk ditampilkan.</p>
-        @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach($articles as $article)
-                    <div class="bg-white rounded-2xl shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-                        @if($article->image)
-                            <img src="{{ $article->image }}" alt="{{ $article->title }}" class="h-48 w-full object-cover">
-                        @else
-                            <div class="h-48 w-full bg-gray-300 flex items-center justify-center text-gray-500">No Image</div>
-                        @endif
-
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h2 class="text-lg font-semibold mb-2 hover:text-blue-600 transition">
-                                    <a href="{{ $article->url }}" target="_blank">{{ Str::limit($article->title, 100) }}</a>
-                                </h2>
-                                <p class="text-gray-600 text-sm mb-3">
-                                    {{ Str::limit($article->summary, 150) }}
-                                </p>
-                            </div>
-                            <div class="flex justify-between items-center text-xs text-gray-500 mt-auto">
-                                <span>{{ $article->source ?? 'Tidak diketahui' }}</span>
-                                <span>{{ \Carbon\Carbon::parse($article->published_at)->format('d M Y') }}</span>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-    </main>
 
     <!-- Footer -->
     <footer class="text-center text-gray-500 text-sm py-6">
