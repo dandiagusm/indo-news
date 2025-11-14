@@ -29,7 +29,7 @@ class WorldNewsController extends Controller
             $params['text'] = $category;
         }
 
-        // 🔒 Tanpa verifikasi SSL (untuk local dev)
+        // Tanpa verifikasi SSL (untuk local dev)
         $response = Http::withoutVerifying()->get('https://api.worldnewsapi.com/search-news', $params);
 
         if ($response->failed()) {
@@ -40,7 +40,7 @@ class WorldNewsController extends Controller
 
         $data = $response->json();
 
-        // 💾 Simpan ke database
+        // Simpan ke database
         foreach ($data['news'] ?? [] as $item) {
             News::updateOrCreate(
                 ['url' => $item['url']],
