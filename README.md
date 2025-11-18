@@ -1,6 +1,6 @@
 
 # IndoNews
-![Indonews](app/public/images/indonews.jpg)
+![Indonews](public/images/indonews.jpg)
 
 ## How to Run 
 ## Install Dependencies
