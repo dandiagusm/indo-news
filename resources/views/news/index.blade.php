@@ -36,7 +36,7 @@
 
                 @if ($article->image)
                     <img 
-                        src="{{ $article->image }}" 
+                        src="{{ $article->image ? asset($article->image) : asset('images/news.png') }}" 
                         alt="{{ $article->title }}" 
                         class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
                     >

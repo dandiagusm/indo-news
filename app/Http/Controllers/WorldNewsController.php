@@ -47,7 +47,7 @@ class WorldNewsController extends Controller
                 [
                     'title' => $item['title'] ?? 'Tanpa Judul',
                     'summary' => $item['text'] ?? null,
-                    'image' => $item['image'] ?? null,
+                    'image' => $item['image'] ?? ($item['image'] ?? 'images/news.png'),
                     'published_at' => $item['publish_date'] ?? null,
                 ]
             );
